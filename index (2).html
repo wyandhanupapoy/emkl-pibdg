@@ -1,0 +1,2442 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Input EMKL Trucking - PT. Pasir Indah Logistik</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #1e40af;
+            --secondary-color: #f97316;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --error-color: #dc2626;
+            --bg-color: #f8fafc;
+            --white: #ffffff;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --radius: 0.5rem;
+            --radius-sm: 0.25rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 1rem;
+            background: var(--gray-100);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .tab:last-child {
+            border-right: none;
+        }
+
+        .tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .tab:hover:not(.active) {
+            background: var(--gray-200);
+        }
+
+        .tab-content {
+            display: none;
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: var(--white);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--gray-500);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-600);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #047857;
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        #previewArea {
+    border: 2px solid var(--primary-color);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    background: var(--gray-50);
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.btn-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-group .btn {
+    flex: 1;
+    min-width: 200px;
+}
+
+@media (max-width: 768px) {
+    .btn-group {
+        flex-direction: column;
+    }
+    
+    .btn-group .btn {
+        width: 100%;
+    }
+}
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: var(--white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table th {
+            background: var(--gray-100);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .data-table tr:hover {
+            background: var(--gray-50);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--gray-500);
+        }
+
+        .close:hover {
+            color: var(--gray-700);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 1.2rem;
+            height: 1.2rem;
+        }
+
+        .currency {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+
+        .currency .decimal {
+            color: var(--secondary-color);
+        }
+
+        .party-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .party-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background: var(--white);
+        }
+
+        .party-item input[type="checkbox"] {
+            width: 1.1rem;
+            height: 1.1rem;
+        }
+
+        .party-item input[type="number"] {
+            width: 60px;
+            padding: 0.25rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            text-align: center;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--success-color);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .alert-error {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--error-color);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+         @media print {
+            body * {
+                visibility: hidden;
+            }
+            /* Jangan cetak preview on-screen, hanya elemen print-content */
+            #previewArea, #previewContent {
+                display: none !important;
+                visibility: hidden !important;
+            }
+            .print-content, .print-content * {
+                visibility: visible;
+            }
+            .print-content {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .header, .tabs, .btn, .modal {
+                display: none !important;
+            }
+
+            /* Usahakan isi invoice tidak terpecah ke halaman baru */
+            .print-invoice {
+                page-break-inside: avoid;
+                break-inside: avoid;
+                -webkit-column-break-inside: avoid;
+            }
+
+            /* Atur margin halaman cetak agar muat satu halaman jika memungkinkan */
+            @page {
+                size: auto;
+                margin: 10mm;
+            }
+        }
+
+        .print-content {
+            display: none;
+        }
+
+        .print-invoice {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            font-family: Arial, sans-serif;
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 1rem;
+        }
+
+        .company-info h2 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .invoice-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+
+        .invoice-table th,
+        .invoice-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        .invoice-table th {
+            background: var(--gray-100);
+            font-weight: 600;
+        }
+
+        .invoice-table .currency {
+            text-align: right;
+        }
+
+        .invoice-footer {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .signature-area {
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .signature-line {
+            border-top: 1px solid var(--text-primary);
+            margin-top: 3rem;
+            padding-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .invoice-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-table {
+                font-size: 0.875rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 2% auto;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Data Input EMKL Trucking</h1>
+        <p>PT. Pasir Indah Logistik - Sistem Manajemen Terpadu</p>
+    </div>
+
+    <div class="container">
+        <div class="stats" id="statsContainer">
+            <div class="stat-card">
+                <h3>Total Job Order</h3>
+                <div class="value" id="totalJobs">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Revenue</h3>
+                <div class="value currency" id="totalRevenue">Rp 0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Pending Jobs</h3>
+                <div class="value" id="pendingJobs">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Container</h3>
+                <div class="value" id="totalContainers">0</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('job-order')">Job Order</button>
+            <button class="tab" onclick="showTab('cost-data')">Data Biaya</button>
+            <button class="tab" onclick="showTab('staffing')">Data Staffing</button>
+            <button class="tab" onclick="showTab('operational')">Data Operasional</button>
+            <button class="tab" onclick="showTab('reports')">Laporan</button>
+            <button class="tab" onclick="showTab('settings')">Pengaturan</button>
+        </div>
+
+        <!-- Job Order Tab -->
+        <div class="tab-content active" id="job-order">
+            <h2>Manajemen Job Order</h2>
+            <form id="jobOrderForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Tanggal Job Order</label>
+                        <input type="datetime-local" id="tanggalJob" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>No Job Order</label>
+                        <input type="text" id="noJobOrder" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>No Invoice</label>
+                        <input type="text" id="noInvoice" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Nama Konsumen</label>
+                        <input type="text" id="namaKonsumen" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tujuan</label>
+                        <input type="text" id="tujuan" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nama Kapal</label>
+                        <input type="text" id="namaKapal" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>ETD</label>
+                        <input type="date" id="etd" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Keterangan</label>
+                        <textarea id="keterangan" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Party (Container)</label>
+                    <div class="party-selector">
+                        <div class="party-item">
+                            <input type="checkbox" id="party20" onchange="updateParty()">
+                            <label for="party20">20ft</label>
+                            <input type="number" id="qty20" min="0" value="0" onchange="updateParty()">
+                        </div>
+                        <div class="party-item">
+                            <input type="checkbox" id="party40" onchange="updateParty()">
+                            <label for="party40">40ft</label>
+                            <input type="number" id="qty40" min="0" value="0" onchange="updateParty()">
+                        </div>
+                        <div class="party-item">
+                            <input type="checkbox" id="party45" onchange="updateParty()">
+                            <label for="party45">45ft</label>
+                            <input type="number" id="qty45" min="0" value="0" onchange="updateParty()">
+                        </div>
+                    </div>
+                    <input type="hidden" id="partyValue">
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">Simpan Job Order</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetJobOrderForm()">Reset Form</button>
+                </div>
+            </form>
+
+            <h3 style="margin-top: 2rem;">Daftar Job Order</h3>
+            <table class="data-table" id="jobOrderTable">
+                <thead>
+                    <tr>
+                        <th>No Job Order</th>
+                        <th>No Invoice</th>
+                        <th>Tanggal</th>
+                        <th>Konsumen</th>
+                        <th>Party</th>
+                        <th>Tujuan</th>
+                        <th>Kapal</th>
+                        <th>ETD</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <!-- Cost Data Tab -->
+        <div class="tab-content" id="cost-data">
+            <h2>Data Biaya</h2>
+            <form id="costDataForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Pilih Job Order</label>
+                        <select id="selectJobOrder" class="form-control" required>
+                            <option value="">-- Pilih Job Order --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Biaya EMKL</label>
+                        <input type="text" id="biayaEMKL" class="form-control currency-input" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Biaya VGM</label>
+                        <input type="text" id="biayaVGM" class="form-control currency-input" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Biaya Jasa Angkutan</label>
+                        <input type="text" id="biayaJasaAngkutan" class="form-control currency-input" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Biaya Closing</label>
+                        <input type="text" id="biayaClosing" class="form-control currency-input" placeholder="0">
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="usePPN" onchange="calculateTotal()">
+                    <label for="usePPN">Gunakan PPN 11%</label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="bebasPPN" onchange="calculateTotal()">
+                    <label for="bebasPPN">Bebas PPN</label>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">Simpan Data Biaya</button>
+                    <button type="button" class="btn btn-outline" onclick="showCostDetail()">Lihat Detail</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetCostForm()">Reset Form</button>
+                </div>
+            </form>
+
+            <h3 style="margin-top: 2rem;">Daftar Data Biaya</h3>
+            <table class="data-table" id="costDataTable">
+                <thead>
+                    <tr>
+                        <th>Job Order</th>
+                        <th>EMKL</th>
+                        <th>VGM</th>
+                        <th>Jasa Angkutan</th>
+                        <th>Closing</th>
+                        <th>Total</th>
+                        <th>PPN</th>
+                        <th>Grand Total</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <!-- Staffing Tab -->
+        <div class="tab-content" id="staffing">
+            <h2>Data Staffing</h2>
+            <form id="staffingForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Tanggal Staffing</label>
+                        <input type="datetime-local" id="tanggalStaffing" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>No Container (Max 13 karakter)</label>
+                        <input type="text" id="noContainer" class="form-control" maxlength="13" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Pilih Job Order</label>
+                        <select id="selectJobOrderStaffing" class="form-control" required>
+                            <option value="">-- Pilih Job Order --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">Simpan Data Staffing</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetStaffingForm()">Reset Form</button>
+                </div>
+            </form>
+
+            <h3 style="margin-top: 2rem;">Daftar Data Staffing</h3>
+            <table class="data-table" id="staffingTable">
+                <thead>
+                    <tr>
+                        <th>Tanggal Staffing</th>
+                        <th>No Container</th>
+                        <th>Job Order</th>
+                        <th>Konsumen</th>
+                        <th>Party</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <!-- Operational Tab -->
+        <div class="tab-content" id="operational">
+            <h2>Data Operasional</h2>
+            <form id="operationalForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Pilih Job Order</label>
+                        <select id="selectJobOrderOperational" class="form-control" required>
+                            <option value="">-- Pilih Job Order --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Uang Jalan</label>
+                        <input type="text" id="uangJalan" class="form-control currency-input" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>LOLO</label>
+                        <input type="text" id="lolo" class="form-control currency-input" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Closing</label>
+                        <input type="text" id="closingOp" class="form-control currency-input" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Kawalan</label>
+                        <input type="text" id="kawalan" class="form-control currency-input" placeholder="0">
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">Simpan Data Operasional</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetOperationalForm()">Reset Form</button>
+                </div>
+            </form>
+
+            <h3 style="margin-top: 2rem;">Daftar Data Operasional</h3>
+            <table class="data-table" id="operationalTable">
+                <thead>
+                    <tr>
+                        <th>Job Order</th>
+                        <th>Uang Jalan</th>
+                        <th>LOLO</th>
+                        <th>Closing</th>
+                        <th>Kawalan</th>
+                        <th>Total</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <!-- Reports Tab -->
+        <!-- Reports Tab -->
+<div class="tab-content" id="reports">
+    <h2>Laporan & Cetak</h2>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Pilih Job Order untuk Cetak</label>
+            <select id="selectJobOrderPrint" class="form-control">
+                <option value="">-- Pilih Job Order --</option>
+            </select>
+        </div>
+    </div>
+
+    <h3 style="margin-top: 1.5rem;">Invoice</h3>
+    <div class="btn-group">
+        <button class="btn btn-outline" onclick="generateInvoice()">
+            📄 Generate Preview Invoice
+        </button>
+        <button class="btn btn-primary" onclick="printInvoice()">
+            🖨️ Cetak Invoice
+        </button>
+    </div>
+
+    <h3 style="margin-top: 1.5rem;">Laporan Lengkap</h3>
+    <div class="btn-group">
+        <button class="btn btn-outline" onclick="generateFullReport()">
+            📋 Generate Preview Laporan
+        </button>
+    </div>
+
+    <h3 style="margin-top: 1.5rem;">Export Data</h3>
+    <div class="btn-group">
+        <button class="btn btn-warning" onclick="exportToExcel()">
+            📊 Export ke Excel
+        </button>
+    </div>
+
+    <div id="previewArea" style="margin-top: 2rem; display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding: 1rem; background: var(--gray-100); border-radius: var(--radius);">
+            <h3 style="margin: 0;">Preview Dokumen</h3>
+            <button class="btn btn-secondary" onclick="closePreview()">✕ Tutup Preview</button>
+        </div>
+        <div id="previewContent" style="background: white; padding: 2rem; border-radius: var(--radius); box-shadow: var(--shadow-md);"></div>
+    </div>
+
+    <h3 style="margin-top: 2rem;">Ringkasan Laporan</h3>
+    <div id="reportSummary"></div>
+</div>
+        <!-- Settings Tab -->
+        <div class="tab-content" id="settings">
+            <h2>Pengaturan</h2>
+            
+            <div class="form-group">
+                <label>Pilih Bank Pembayaran</label>
+                <select id="selectedBank" class="form-control">
+                    <option value="bank-index">Bank INDEX - 2201008383</option>
+                    <option value="bank-bca">Bank BCA - Custom Account</option>
+                </select>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-success" onclick="backupData()">Backup Data</button>
+                <button class="btn btn-warning" onclick="document.getElementById('importFile').click()">Import Data</button>
+                <button class="btn btn-danger" onclick="resetAllData()">Reset Semua Data</button>
+            </div>
+            
+            <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
+
+            <h3 style="margin-top: 2rem;">Informasi Perusahaan</h3>
+            <div class="company-info">
+                <p><strong>PT. Pasir Indah Logistik</strong></p>
+                <p>Jl. Gedebage Selatan No.65, Cisaranten Kidul, Kec. Gedebage, Kota Bandung, Jawa Barat 40295</p>
+                <p>Telp: +62 813-2246-0097</p>
+                <p>Email: pasirindahlogistik@yahoo.co.id</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Cost Detail -->
+    <div id="costDetailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCostDetail()">&times;</span>
+            <h2>Detail Perhitungan Biaya</h2>
+            <div id="costDetailContent"></div>
+        </div>
+    </div>
+
+    <!-- Print Content -->
+    <div class="print-content" id="printContent"></div>
+
+    <script>
+        // Global variables
+        let jobOrderCounter = 1;
+        let invoiceCounter = 1;
+        let currentEditId = null;
+        
+        // Data storage
+        let jobOrders = [];
+        let costData = [];
+        let staffingData = [];
+        let operationalData = [];
+        
+        // IndexedDB setup
+        let db;
+        const DB_NAME = 'EMKL_Database';
+        const DB_VERSION = 1;
+        
+        function initIndexedDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    db = request.result;
+                    resolve(db);
+                };
+                
+                request.onupgradeneeded = (event) => {
+                    db = event.target.result;
+                    
+                    // Create object stores
+                    if (!db.objectStoreNames.contains('jobOrders')) {
+                        db.createObjectStore('jobOrders', { keyPath: 'id' });
+                    }
+                    if (!db.objectStoreNames.contains('costData')) {
+                        db.createObjectStore('costData', { keyPath: 'id' });
+                    }
+                    if (!db.objectStoreNames.contains('staffingData')) {
+                        db.createObjectStore('staffingData', { keyPath: 'id' });
+                    }
+                    if (!db.objectStoreNames.contains('operationalData')) {
+                        db.createObjectStore('operationalData', { keyPath: 'id' });
+                    }
+                    if (!db.objectStoreNames.contains('counters')) {
+                        db.createObjectStore('counters', { keyPath: 'name' });
+                    }
+                };
+            });
+        }
+        
+        // Save data to IndexedDB
+        async function saveToIndexedDB(storeName, data) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([storeName], 'readwrite');
+                const store = transaction.objectStore(storeName);
+                const request = store.put(data);
+                
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            });
+        }
+        
+        // Load data from IndexedDB
+        async function loadFromIndexedDB(storeName) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([storeName], 'readonly');
+                const store = transaction.objectStore(storeName);
+                const request = store.getAll();
+                
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+        
+        // Delete from IndexedDB
+        async function deleteFromIndexedDB(storeName, id) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([storeName], 'readwrite');
+                const store = transaction.objectStore(storeName);
+                const request = store.delete(id);
+                
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            });
+        }
+        
+        // Save counters
+        async function saveCounters() {
+            await saveToIndexedDB('counters', { name: 'jobOrderCounter', value: jobOrderCounter });
+            await saveToIndexedDB('counters', { name: 'invoiceCounter', value: invoiceCounter });
+        }
+        
+        // Load counters
+        async function loadCounters() {
+            const counters = await loadFromIndexedDB('counters');
+            const jobCounter = counters.find(c => c.name === 'jobOrderCounter');
+            const invCounter = counters.find(c => c.name === 'invoiceCounter');
+            
+            if (jobCounter) jobOrderCounter = jobCounter.value;
+            if (invCounter) invoiceCounter = invCounter.value;
+        }
+        
+        // Load all data from IndexedDB
+        async function loadAllDataFromDB() {
+            try {
+                jobOrders = await loadFromIndexedDB('jobOrders');
+                costData = await loadFromIndexedDB('costData');
+                staffingData = await loadFromIndexedDB('staffingData');
+                operationalData = await loadFromIndexedDB('operationalData');
+                await loadCounters();
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        function createInvoiceContent(jobOrder, cost, bankInfo) {
+    const biayaEMKL = cost ? formatCurrencyWithDecimal(cost.biayaEMKL) : formatCurrencyWithDecimal(0);
+    const biayaVGM = cost ? formatCurrencyWithDecimal(cost.biayaVGM) : formatCurrencyWithDecimal(0);
+    const biayaJasa = cost ? formatCurrencyWithDecimal(cost.biayaJasaAngkutan) : formatCurrencyWithDecimal(0);
+    const biayaClosing = cost ? formatCurrencyWithDecimal(cost.biayaClosing) : formatCurrencyWithDecimal(0);
+    const subtotal = cost ? formatCurrencyWithDecimal(cost.subtotal) : formatCurrencyWithDecimal(0);
+    const dpp = cost ? formatCurrencyWithDecimal(cost.subtotal * 11/12) : formatCurrencyWithDecimal(0);
+    const ppn = cost ? (cost.bebasPPN ? 'Bebas PPN' : `Rp ${formatCurrencyWithDecimal(cost.ppn)}`) : `Rp ${formatCurrencyWithDecimal(0)}`;
+    const total = cost ? formatCurrencyWithDecimal(cost.total) : formatCurrencyWithDecimal(0);
+    const totalAngka = cost ? cost.total : 0;
+    const terbilangText = terbilang(Math.floor(totalAngka)).trim() + ' Rupiah';
+    return `
+        <div class="print-invoice">
+            <div class="invoice-header">
+                <div class="company-info">
+                    <h2>PT. Pasir Indah Logistik</h2>
+                    <p>Jl. Gedebage Selatan No.65, Cisaranten Kidul, Kec. Gedebage, Kota Bandung, Jawa Barat 40295</p>
+                    <p>Telp: +62 813-2246-0097</p>
+                </div>
+                <div>
+                    <h3>INVOICE</h3>
+                    <p><strong>No Invoice:</strong> ${jobOrder ? jobOrder.noInvoice : '-'}</p>
+                    <p><strong>No Job Order:</strong> ${jobOrder ? jobOrder.noJobOrder : '-'}</p>
+                    <p><strong>Tanggal:</strong> ${jobOrder ? new Date(jobOrder.tanggal).toLocaleDateString('id-ID') : '-'}</p>
+                </div>
+            </div>
+
+            <div class="invoice-details">
+                <div>
+                    <p><strong>Kepada:</strong></p>
+                    <p>${jobOrder ? jobOrder.konsumen : '-'}</p>
+                    <p>${jobOrder ? jobOrder.tujuan : '-'}</p>
+                </div>
+                <div>
+                    <p><strong>Kapal / ETD:</strong></p>
+                    <p>${jobOrder ? jobOrder.kapal : '-'} / ${jobOrder ? new Date(jobOrder.etd).toLocaleDateString('id-ID') : '-'}</p>
+                </div>
+            </div>
+
+            <table class="invoice-table">
+                <thead>
+                    <tr>
+                        <th>Uraian</th>
+                        <th class="currency">Jumlah (Rp)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Biaya EMKL</td><td class="currency">Rp ${biayaEMKL}</td></tr>
+                    <tr><td>Biaya VGM</td><td class="currency">Rp ${biayaVGM}</td></tr>
+                    <tr><td>Biaya Jasa Angkutan</td><td class="currency">Rp ${biayaJasa}</td></tr>
+                    <tr><td>Biaya Closing</td><td class="currency">Rp ${biayaClosing}</td></tr>
+                    <tr style="font-weight:bold; background: var(--gray-100);">
+                        <td>Subtotal</td>
+                        <td class="currency">Rp ${subtotal}</td>
+                    </tr>
+                    <tr>
+                        <td>PPN 11%</td>
+                        <td class="currency">${ppn}</td>
+                    </tr>
+                    <tr>
+                        <td>DPP</td>
+                        <td class="currency">Rp ${dpp}</td>
+                    </tr>
+                    <tr style="font-weight:bold; background: var(--gray-100);">
+                        <td>Grand Total</td>
+                        <td class="currency">Rp ${total}</td>
+                    </tr>
+                </tbody>
+                
+            </table>
+            <p><strong>Terbilang:</strong> ${terbilangText}</p>
+
+            <div class="invoice-footer">
+                <div>
+                    <p><strong>Bank Pembayaran:</strong></p>
+                    <p>${bankInfo}</p>
+                </div>
+                <div class="signature-area">
+                    <p>Hormat kami,</p>
+                    <div class="signature-line">PT. Pasir Indah Logistik</div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+        function createFullReportContent(jobOrder, cost, staffing, operational, bankInfo) {
+    const invoiceHtml = createInvoiceContent(jobOrder, cost, bankInfo);
+    
+    // staffing section
+    let staffingHtml = '<p>Tidak ada data staffing.</p>';
+    if (staffing && staffing.length) {
+        staffingHtml = `
+            <table class="invoice-table">
+                <thead><tr><th>Tanggal Staffing</th><th>No Container</th></tr></thead>
+                <tbody>
+                    ${staffing.map(s => `<tr><td>${new Date(s.tanggalStaffing).toLocaleDateString('id-ID')}</td><td>${s.noContainer}</td></tr>`).join('')}
+                </tbody>
+            </table>
+        `;
+    }
+
+    // operational section
+    let operationalHtml = '<p>Tidak ada data operasional.</p>';
+    if (operational) {
+        operationalHtml = `
+            <table class="invoice-table">
+                <thead><tr><th>Uraian</th><th class="currency">Jumlah (Rp)</th></tr></thead>
+                <tbody>
+                    <tr><td>Uang Jalan</td><td class="currency">Rp ${formatCurrencyWithDecimal(operational.uangJalan)}</td></tr>
+                    <tr><td>LOLO</td><td class="currency">Rp ${formatCurrencyWithDecimal(operational.lolo)}</td></tr>
+                    <tr><td>Closing</td><td class="currency">Rp ${formatCurrencyWithDecimal(operational.closing)}</td></tr>
+                    <tr><td>Kawalan</td><td class="currency">Rp ${formatCurrencyWithDecimal(operational.kawalan)}</td></tr>
+                    <tr style="font-weight:bold; background: var(--gray-100);"><td>Total Operasional</td><td class="currency">Rp ${formatCurrencyWithDecimal(operational.total)}</td></tr>
+                </tbody>
+            </table>
+        `;
+    }
+
+    return `
+        <div class="print-invoice">
+            ${invoiceHtml}
+            <hr>
+            <h3>Data Staffing</h3>
+            ${staffingHtml}
+            <hr>
+            <h3>Data Operasional</h3>
+            ${operationalHtml}
+        </div>
+    `;
+}
+
+       function generateInvoice() {
+    const jobOrderId = document.getElementById('selectJobOrderPrint').value;
+    if (!jobOrderId) {
+        alert('Silakan pilih job order terlebih dahulu!');
+        return;
+    }
+    
+    const jobOrder = jobOrders.find(job => job.id === jobOrderId);
+    if (!jobOrder) {
+        alert('Job order tidak ditemukan!');
+        return;
+    }
+    
+    const cost = costData.find(c => c.jobOrderId === jobOrderId);
+    if (!cost) {
+        alert('Data biaya belum tersedia untuk job order ini!');
+        return;
+    }
+    
+    const selectedBank = document.getElementById('selectedBank').value;
+    const bankInfo = selectedBank === 'bank-index'
+        ? 'Bank INDEX - 2201008383 a.n. PT. PASIR INDAH LOGISTIK'
+        : 'Bank BCA - Custom Account a.n. PT. PASIR INDAH LOGISTIK';
+
+    const html = createInvoiceContent(jobOrder, cost, bankInfo);
+    
+    // Show in preview area
+    const previewArea = document.getElementById('previewArea');
+    const previewContent = document.getElementById('previewContent');
+    previewContent.innerHTML = html;
+    previewArea.style.display = 'block';
+    
+    // Also store in print content for printing
+    const printEl = document.getElementById('printContent');
+    printEl.innerHTML = html;
+    
+    // Scroll to preview
+    previewArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    
+    showAlert('✅ Preview invoice berhasil digenerate!', 'success');
+}
+
+       function generateFullReport() {
+    const jobOrderId = document.getElementById('selectJobOrderPrint').value;
+    if (!jobOrderId) {
+        alert('Silakan pilih job order terlebih dahulu!');
+        return;
+    }
+    
+    const jobOrder = jobOrders.find(job => job.id === jobOrderId);
+    if (!jobOrder) {
+        alert('Job order tidak ditemukan!');
+        return;
+    }
+    
+    const cost = costData.find(c => c.jobOrderId === jobOrderId);
+    const staffing = staffingData.filter(s => s.jobOrderId === jobOrderId);
+    const operational = operationalData.find(o => o.jobOrderId === jobOrderId);
+    
+    const selectedBank = document.getElementById('selectedBank').value;
+    const bankInfo = selectedBank === 'bank-index'
+        ? 'Bank INDEX - 2201008383 a.n. PT. PASIR INDAH LOGISTIK'
+        : 'Bank BCA - Custom Account a.n. PT. PASIR INDAH LOGISTIK';
+
+    const html = createFullReportContent(jobOrder, cost, staffing, operational, bankInfo);
+    
+    // Show in preview area
+    const previewArea = document.getElementById('previewArea');
+    const previewContent = document.getElementById('previewContent');
+    previewContent.innerHTML = html;
+    previewArea.style.display = 'block';
+    
+    // Also store in print content for printing
+    const printEl = document.getElementById('printContent');
+    printEl.innerHTML = html;
+    
+    // Scroll to preview
+    previewArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    
+    showAlert('✅ Preview laporan lengkap berhasil digenerate!', 'success');
+}
+
+function closePreview() {
+    const previewArea = document.getElementById('previewArea');
+    previewArea.style.display = 'none';
+}
+
+        function printInvoice() {
+    const printEl = document.getElementById('printContent');
+    if (!printEl.innerHTML.trim()) {
+        alert('⚠️ Silakan generate preview invoice terlebih dahulu!\n\nKlik tombol "📄 Generate Preview Invoice" untuk membuat preview.');
+        return;
+    }
+
+    // ensure it's visible for print stylesheet
+    printEl.style.display = 'block';
+
+    window.onafterprint = function() {
+        printEl.style.display = 'none';
+        window.onafterprint = null;
+    };
+
+    window.print();
+}
+
+// Function to convert number to Indonesian words
+        function terbilang(angka) {
+            const bilangan = ['', 'Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam', 'Tujuh', 'Delapan', 'Sembilan', 'Sepuluh', 'Sebelas'];
+            
+            if (angka < 12) {
+                return bilangan[angka];
+            } else if (angka < 20) {
+                return bilangan[angka - 10] + ' Belas';
+            } else if (angka < 100) {
+                return bilangan[Math.floor(angka / 10)] + ' Puluh ' + bilangan[angka % 10];
+            } else if (angka < 200) {
+                return 'Seratus ' + terbilang(angka - 100);
+            } else if (angka < 1000) {
+                return bilangan[Math.floor(angka / 100)] + ' Ratus ' + terbilang(angka % 100);
+            } else if (angka < 2000) {
+                return 'Seribu ' + terbilang(angka - 1000);
+            } else if (angka < 1000000) {
+                return terbilang(Math.floor(angka / 1000)) + ' Ribu ' + terbilang(angka % 1000);
+            } else if (angka < 1000000000) {
+                return terbilang(Math.floor(angka / 1000000)) + ' Juta ' + terbilang(angka % 1000000);
+            } else if (angka < 1000000000000) {
+                return terbilang(Math.floor(angka / 1000000000)) + ' Miliar ' + terbilang(angka % 1000000000);
+            } else {
+                return 'Angka terlalu besar';
+            }
+        }
+        
+        function printFullReport() {
+    const printEl = document.getElementById('printContent');
+    if (!printEl.innerHTML.trim()) {
+        alert('⚠️ Silakan generate preview laporan terlebih dahulu!\n\nKlik tombol "📋 Generate Preview Laporan" untuk membuat preview.');
+        return;
+    }
+
+    // ensure it's visible for print stylesheet
+    printEl.style.display = 'block';
+
+    window.onafterprint = function() {
+        printEl.style.display = 'none';
+        window.onafterprint = null;
+    };
+
+    window.print();
+}
+        
+        // Sample data initialization
+        function initSampleData() {
+            if (jobOrders.length === 0) {
+                jobOrders = [
+                    {
+                        id: "JO001",
+                        noJobOrder: "PILOG001",
+                        noInvoice: "INV-2024-001",
+                        tanggal: "2024-10-17T10:00:00",
+                        konsumen: "PT. Makmur Sejahtera",
+                        party: "2x20ft, 1x40ft",
+                        tujuan: "Surabaya",
+                        kapal: "KM Nusantara",
+                        etd: "2024-10-20",
+                        keterangan: "Urgent shipment"
+                    }
+                ];
+                
+                costData = [
+                    {
+                        id: "CD001",
+                        jobOrderId: "JO001",
+                        biayaEMKL: 2500000,
+                        biayaVGM: 350000,
+                        biayaJasaAngkutan: 1200000,
+                        biayaClosing: 150000,
+                        subtotal: 4200000,
+                        ppn: 462000,
+                        total: 4662000,
+                        usePPN: true,
+                        bebasPPN: false
+                    }
+                ];
+                
+                staffingData = [
+                    {
+                        id: "ST001",
+                        tanggalStaffing: "2024-10-17T10:00:00",
+                        noContainer: "ABCD1234567890",
+                        jobOrderId: "JO001"
+                    }
+                ];
+                
+                operationalData = [
+                    {
+                        id: "OP001",
+                        jobOrderId: "JO001",
+                        uangJalan: 500000,
+                        lolo: 300000,
+                        closing: 100000,
+                        kawalan: 200000,
+                        total: 1100000
+                    }
+                ];
+                
+                jobOrderCounter = 2;
+                invoiceCounter = 2;
+            }
+        }
+        
+        // Initialize counters from existing data
+        if (jobOrders.length > 0) {
+            jobOrderCounter = Math.max(...jobOrders.map(job => parseInt(job.noJobOrder.replace('PILOG', '')))) + 1;
+            invoiceCounter = Math.max(...jobOrders.map(job => parseInt(job.noInvoice.replace('INV-2024-', '')))) + 1;
+        }
+
+        // Tab functionality
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            // Update dropdowns when switching tabs
+            updateJobOrderDropdowns();
+        }
+
+        // Initialize app
+        async function initApp() {
+            try {
+                await initIndexedDB();
+                await loadAllDataFromDB(); // Muat semua data dari DB
+
+                setCurrentDateTime();
+                generateJobOrderNumber();
+                updateJobOrderDropdowns();
+                loadJobOrderTable();
+                loadCostDataTable();
+                loadStaffingTable();
+                loadOperationalTable();
+                setupCurrencyInputs();
+                updateStats();
+
+                showAlert('✅ Database loaded successfully!', 'success');
+            } catch (error) {
+                console.error('Failed to initialize the app:', error);
+                showAlert('❌ Failed to load database!', 'error');
+            }
+        }
+
+        // Set current date time
+        function setCurrentDateTime() {
+            const now = new Date();
+            const dateTimeString = now.toISOString().slice(0, 16);
+            document.getElementById('tanggalJob').value = dateTimeString;
+            document.getElementById('tanggalStaffing').value = dateTimeString;
+        }
+
+        // Generate job order number
+        function generateJobOrderNumber() {
+            const jobOrderNum = `PILOG${String(jobOrderCounter).padStart(3, '0')}`;
+            const invoiceNum = `INV-2024-${String(invoiceCounter).padStart(3, '0')}`;
+            document.getElementById('noJobOrder').value = jobOrderNum;
+            document.getElementById('noInvoice').value = invoiceNum;
+        }
+
+        // Update party display
+        function updateParty() {
+            const parties = [];
+            
+            if (document.getElementById('party20').checked && document.getElementById('qty20').value > 0) {
+                parties.push(`${document.getElementById('qty20').value}x20ft`);
+            }
+            if (document.getElementById('party40').checked && document.getElementById('qty40').value > 0) {
+                parties.push(`${document.getElementById('qty40').value}x40ft`);
+            }
+            if (document.getElementById('party45').checked && document.getElementById('qty45').value > 0) {
+                parties.push(`${document.getElementById('qty45').value}x45ft`);
+            }
+            
+            document.getElementById('partyValue').value = parties.join(', ');
+        }
+
+        // Setup currency inputs
+        function setupCurrencyInputs() {
+            document.querySelectorAll('.currency-input').forEach(input => {
+                input.addEventListener('input', function() {
+                    const value = this.value.replace(/[^0-9]/g, '');
+                    if (value) {
+                        this.value = formatCurrency(parseInt(value));
+                    }
+                    calculateTotal();
+                });
+            });
+        }
+
+        // Format currency
+        function formatCurrency(amount) {
+            const formatted = new Intl.NumberFormat('id-ID').format(amount);
+            return formatted;
+        }
+
+        // Format currency with decimal highlight
+        function formatCurrencyWithDecimal(amount) {
+            const formatted = new Intl.NumberFormat('id-ID', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(amount);
+            
+            const parts = formatted.split(',');
+            return `${parts[0]}<span class="decimal">,${parts[1]}</span>`;
+        }
+
+        // Parse currency input
+        function parseCurrency(value) {
+            return parseInt(value.replace(/[^0-9]/g, '')) || 0;
+        }
+
+        // Calculate total costs
+        function calculateTotal() {
+            const emkl = parseCurrency(document.getElementById('biayaEMKL').value);
+            const vgm = parseCurrency(document.getElementById('biayaVGM').value);
+            const angkutan = parseCurrency(document.getElementById('biayaJasaAngkutan').value);
+            const closing = parseCurrency(document.getElementById('biayaClosing').value);
+            
+            const subtotal = emkl + vgm + angkutan + closing;
+            const usePPN = document.getElementById('usePPN').checked;
+            const bebasPPN = document.getElementById('bebasPPN').checked;
+            
+            let ppn = 0;
+            let total = subtotal;
+            
+            if (usePPN && !bebasPPN) {
+                ppn = subtotal * 0.11;
+                total = subtotal + ppn;
+            }
+            
+            return { subtotal, ppn, total, usePPN, bebasPPN };
+        }
+
+        // Job Order Form
+        document.getElementById('jobOrderForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const partyValue = document.getElementById('partyValue').value;
+            if (!partyValue) {
+                alert('Silakan pilih party container!');
+                return;
+            }
+            
+            const jobOrder = {
+                id: currentEditId || `JO${Date.now()}`,
+                noJobOrder: document.getElementById('noJobOrder').value,
+                noInvoice: document.getElementById('noInvoice').value,
+                tanggal: document.getElementById('tanggalJob').value,
+                konsumen: document.getElementById('namaKonsumen').value,
+                party: partyValue,
+                tujuan: document.getElementById('tujuan').value,
+                kapal: document.getElementById('namaKapal').value,
+                etd: document.getElementById('etd').value,
+                keterangan: document.getElementById('keterangan').value
+            };
+            
+            if (currentEditId) {
+                const index = jobOrders.findIndex(job => job.id === currentEditId);
+                jobOrders[index] = jobOrder;
+                currentEditId = null;
+            } else {
+                jobOrders.push(jobOrder);
+                jobOrderCounter++;
+                invoiceCounter++;
+            }
+            
+            // Hapus komentar ini
+            // Data saved to memory
+
+            // TAMBAHKAN INI
+            try {
+                await saveToIndexedDB('jobOrders', jobOrder);
+                await saveCounters();
+            } catch (err) {
+                console.warn('DB save error', err);
+            }
+            
+            loadJobOrderTable();
+            updateJobOrderDropdowns();
+             // Data saved to memory
+             loadJobOrderTable();
+             updateJobOrderDropdowns();
+             resetJobOrderForm();
+             updateStats();
+             
+             showAlert('Job order berhasil disimpan!', 'success');
+         });
+
+        // Cost Data Form
+        document.getElementById('costDataForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const jobOrderId = document.getElementById('selectJobOrder').value;
+            const calculation = calculateTotal();
+            
+            const cost = {
+                id: currentEditId || `CD${Date.now()}`,
+                jobOrderId: jobOrderId,
+                biayaEMKL: parseCurrency(document.getElementById('biayaEMKL').value),
+                biayaVGM: parseCurrency(document.getElementById('biayaVGM').value),
+                biayaJasaAngkutan: parseCurrency(document.getElementById('biayaJasaAngkutan').value),
+                biayaClosing: parseCurrency(document.getElementById('biayaClosing').value),
+                subtotal: calculation.subtotal,
+                ppn: calculation.ppn,
+                total: calculation.total,
+                usePPN: calculation.usePPN,
+                bebasPPN: calculation.bebasPPN
+            };
+            
+            if (currentEditId) {
+                const index = costData.findIndex(c => c.id === currentEditId);
+                costData[index] = cost;
+                currentEditId = null;
+            } else {
+                costData.push(cost);
+            }
+            
+            // Hapus komentar ini
+            // Data saved to memory
+
+            // TAMBAHKAN INI
+            try {
+                await saveToIndexedDB('costData', cost);
+            } catch (err) {
+                console.warn('DB save error', err);
+            }
+            
+             loadCostDataTable();
+             
+             // Data saved to memory
+             loadCostDataTable();
+             resetCostForm();
+             updateStats();
+             
+             showAlert('Data biaya berhasil disimpan!', 'success');
+         });
+
+        // Staffing Form
+        document.getElementById('staffingForm').addEventListener('submit', async function(e) {  // UBAH INI: tambah async
+        e.preventDefault();
+        
+        const staffing = {
+            id: currentEditId || `ST${Date.now()}`,
+            tanggalStaffing: document.getElementById('tanggalStaffing').value,
+            noContainer: document.getElementById('noContainer').value,
+            jobOrderId: document.getElementById('selectJobOrderStaffing').value
+        };
+        
+        if (currentEditId) {
+            const index = staffingData.findIndex(s => s.id === currentEditId);
+            staffingData[index] = staffing;
+            currentEditId = null;
+        } else {
+            staffingData.push(staffing);
+        }
+        
+        // TAMBAHKAN INI: Simpan ke IndexedDB
+        try {
+            await saveToIndexedDB('staffingData', staffing);
+        } catch (err) {
+            console.warn('DB save error', err);
+        }
+        
+        loadStaffingTable();
+        resetStaffingForm();
+        updateStats();
+        
+        showAlert('Data staffing berhasil disimpan!', 'success');
+    });
+
+    // Operational Form
+    document.getElementById('operationalForm').addEventListener('submit', async function(e) {  // UBAH INI: tambah async
+        e.preventDefault();
+        
+        const operational = {
+            id: currentEditId || `OP${Date.now()}`,
+            jobOrderId: document.getElementById('selectJobOrderOperational').value,
+            uangJalan: parseCurrency(document.getElementById('uangJalan').value),
+            lolo: parseCurrency(document.getElementById('lolo').value),
+            closing: parseCurrency(document.getElementById('closingOp').value),
+            kawalan: parseCurrency(document.getElementById('kawalan').value)
+        };
+        
+        operational.total = operational.uangJalan + operational.lolo + operational.closing + operational.kawalan;
+        
+        if (currentEditId) {
+            const index = operationalData.findIndex(o => o.id === currentEditId);
+            operationalData[index] = operational;
+            currentEditId = null;
+        } else {
+            operationalData.push(operational);
+        }
+        
+        // TAMBAHKAN INI: Simpan ke IndexedDB
+        try {
+            await saveToIndexedDB('operationalData', operational);
+        } catch (err) {
+            console.warn('DB save error', err);
+        }
+        
+        loadOperationalTable();
+        resetOperationalForm();
+        updateStats();
+        
+        showAlert('Data operasional berhasil disimpan!', 'success');
+    });
+
+    // Delete functions untuk staffing dan operational
+    async function deleteStaffing(id) {  // UBAH INI: tambah async
+        if (confirm('Apakah Anda yakin ingin menghapus data staffing ini?')) {
+            staffingData = staffingData.filter(staffing => staffing.id !== id);
+            
+            // TAMBAHKAN INI: Hapus dari IndexedDB
+            try {
+                await deleteFromIndexedDB('staffingData', id);
+            } catch (err) {
+                console.warn('DB delete error', err);
+            }
+            
+            loadStaffingTable();
+            showAlert('Data staffing berhasil dihapus!', 'success');
+        }
+    }
+
+    async function deleteOperational(id) {  // UBAH INI: tambah async
+        if (confirm('Apakah Anda yakin ingin menghapus data operasional ini?')) {
+            operationalData = operationalData.filter(operational => operational.id !== id);
+            
+            // TAMBAHKAN INI: Hapus dari IndexedDB
+            try {
+                await deleteFromIndexedDB('operationalData', id);
+            } catch (err) {
+                console.warn('DB delete error', err);
+            }
+            
+            loadOperationalTable();
+            showAlert('Data operasional berhasil dihapus!', 'success');
+        }
+    }
+
+    // Fungsi importData (tambahkan save ke DB setelah import memory)
+    function importData(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = async function(e) {  // UBAH INI: tambah async
+            try {
+                const importedData = JSON.parse(e.target.result);
+                
+                if (confirm('Import data akan mengganti semua data yang ada. Lanjutkan?')) {
+                    jobOrders = importedData.jobOrders || [];
+                    costData = importedData.costData || [];
+                    staffingData = importedData.staffingData || [];
+                    operationalData = importedData.operationalData || [];
+                    
+                    // Update counters
+                    if (jobOrders.length > 0) {
+                        jobOrderCounter = Math.max(...jobOrders.map(job => parseInt(job.noJobOrder.replace('PILOG', '')))) + 1;
+                        invoiceCounter = Math.max(...jobOrders.map(job => parseInt(job.noInvoice.replace('INV-2024-', '')))) + 1;
+                    }
+                    
+                    // TAMBAHKAN INI: Simpan imported data ke IndexedDB (overwrite)
+                    try {
+                        // Clear existing data in DB first (optional, tapi untuk konsistensi)
+                        const transaction = db.transaction(['jobOrders', 'costData', 'staffingData', 'operationalData'], 'readwrite');
+                        await transaction.objectStore('jobOrders').clear();
+                        await transaction.objectStore('costData').clear();
+                        await transaction.objectStore('staffingData').clear();
+                        await transaction.objectStore('operationalData').clear();
+                        
+                        // Save new data
+                        for (const job of jobOrders) await saveToIndexedDB('jobOrders', job);
+                        for (const cost of costData) await saveToIndexedDB('costData', cost);
+                        for (const staff of staffingData) await saveToIndexedDB('staffingData', staff);
+                        for (const op of operationalData) await saveToIndexedDB('operationalData', op);
+                        await saveCounters();
+                    } catch (err) {
+                        console.warn('DB import error', err);
+                    }
+                    
+                    // Reload all tables
+                    loadJobOrderTable();
+                    loadCostDataTable();
+                    loadStaffingTable();
+                    loadOperationalTable();
+                    updateJobOrderDropdowns();
+                    updateStats();
+                    
+                    showAlert('Data berhasil diimport!', 'success');
+                }
+            } catch (error) {
+                showAlert('Error: File tidak valid!', 'error');
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    // Fungsi resetAllData (tambahkan clear DB)
+    async function resetAllData() {  // UBAH INI: tambah async
+        if (confirm('PERINGATAN: Ini akan menghapus SEMUA data! Apakah Anda yakin?')) {
+            if (confirm('Konfirmasi sekali lagi: Semua data akan hilang permanen!')) {
+                jobOrders = [];
+                costData = [];
+                staffingData = [];
+                operationalData = [];
+                jobOrderCounter = 1;
+                invoiceCounter = 1;
+                
+                // TAMBAHKAN INI: Clear IndexedDB
+                try {
+                    const transaction = db.transaction(['jobOrders', 'costData', 'staffingData', 'operationalData', 'counters'], 'readwrite');
+                    await transaction.objectStore('jobOrders').clear();
+                    await transaction.objectStore('costData').clear();
+                    await transaction.objectStore('staffingData').clear();
+                    await transaction.objectStore('operationalData').clear();
+                    await transaction.objectStore('counters').clear();
+                } catch (err) {
+                    console.warn('DB clear error', err);
+                }
+                
+                loadJobOrderTable();
+                loadCostDataTable();
+                loadStaffingTable();
+                loadOperationalTable();
+                updateJobOrderDropdowns();
+                updateStats();
+                
+                showAlert('Semua data berhasil dihapus!', 'success');
+            }
+        }
+    }
+
+        // Load tables
+        function loadJobOrderTable() {
+            const tbody = document.querySelector('#jobOrderTable tbody');
+            tbody.innerHTML = '';
+            
+            jobOrders.forEach(job => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${job.noJobOrder}</td>
+                    <td>${job.noInvoice}</td>
+                    <td>${new Date(job.tanggal).toLocaleDateString('id-ID')}</td>
+                    <td>${job.konsumen}</td>
+                    <td>${job.party}</td>
+                    <td>${job.tujuan}</td>
+                    <td>${job.kapal}</td>
+                    <td>${new Date(job.etd).toLocaleDateString('id-ID')}</td>
+                    <td>
+                        <button class="btn btn-outline" onclick="editJobOrder('${job.id}')">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteJobOrder('${job.id}')">Hapus</button>
+                    </td>
+                `;
+            });
+        }
+
+        function loadCostDataTable() {
+            const tbody = document.querySelector('#costDataTable tbody');
+            tbody.innerHTML = '';
+            
+            costData.forEach(cost => {
+                const jobOrder = jobOrders.find(job => job.id === cost.jobOrderId);
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${jobOrder ? jobOrder.noJobOrder : 'N/A'}</td>
+                    <td class="currency">Rp ${formatCurrencyWithDecimal(cost.biayaEMKL)}</td>
+                    <td class="currency">Rp ${formatCurrencyWithDecimal(cost.biayaVGM)}</td>
+                    <td class="currency">Rp ${formatCurrencyWithDecimal(cost.biayaJasaAngkutan)}</td>
+                    <td class="currency">Rp ${formatCurrencyWithDecimal(cost.biayaClosing)}</td>
+                    <td class="currency">Rp ${formatCurrencyWithDecimal(cost.subtotal)}</td>
+                    <td class="currency">${cost.bebasPPN ? 'Bebas PPN' : (cost.usePPN ? `Rp ${formatCurrencyWithDecimal(cost.ppn)}` : 'Rp 0,00')}</td>
+                    <td class="currency">Rp ${formatCurrencyWithDecimal(cost.total)}</td>
+                    <td>
+                        <button class="btn btn-outline" onclick="editCostData('${cost.id}')">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteCostData('${cost.id}')">Hapus</button>
+                    </td>
+                `;
+            });
+        }
+
+        function loadStaffingTable() {
+            const tbody = document.querySelector('#staffingTable tbody');
+            tbody.innerHTML = '';
+            
+            staffingData.forEach(staffing => {
+                const jobOrder = jobOrders.find(job => job.id === staffing.jobOrderId);
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${new Date(staffing.tanggalStaffing).toLocaleDateString('id-ID')}</td>
+                    <td>${staffing.noContainer}</td>
+                    <td>${jobOrder ? jobOrder.noJobOrder : 'N/A'}</td>
+                    <td>${jobOrder ? jobOrder.konsumen : 'N/A'}</td>
+                    <td>${jobOrder ? jobOrder.party : 'N/A'}</td>
+                    <td>
+                        <button class="btn btn-outline" onclick="editStaffing('${staffing.id}')">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteStaffing('${staffing.id}')">Hapus</button>
+                    </td>
+                `;
+            });
+        }
+
+        function loadOperationalTable() {
+            const tbody = document.querySelector('#operationalTable tbody');
+            tbody.innerHTML = '';
+            
+            operationalData.forEach(operational => {
+                const jobOrder = jobOrders.find(job => job.id === operational.jobOrderId);
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${jobOrder ? jobOrder.noJobOrder : 'N/A'}</td>
+                    <td class="currency">Rp ${formatCurrencyWithDecimal(operational.uangJalan)}</td>
+                    <td class="currency">Rp ${formatCurrencyWithDecimal(operational.lolo)}</td>
+                    <td class="currency">Rp ${formatCurrencyWithDecimal(operational.closing)}</td>
+                    <td class="currency">Rp ${formatCurrencyWithDecimal(operational.kawalan)}</td>
+                    <td class="currency">Rp ${formatCurrencyWithDecimal(operational.total)}</td>
+                    <td>
+                        <button class="btn btn-outline" onclick="editOperational('${operational.id}')">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteOperational('${operational.id}')">Hapus</button>
+                    </td>
+                `;
+            });
+        }
+
+        // Update job order dropdowns
+        function updateJobOrderDropdowns() {
+            const dropdowns = [
+                'selectJobOrder',
+                'selectJobOrderStaffing', 
+                'selectJobOrderOperational',
+                'selectJobOrderPrint'
+            ];
+            
+            dropdowns.forEach(dropdownId => {
+                const dropdown = document.getElementById(dropdownId);
+                const currentValue = dropdown.value;
+                dropdown.innerHTML = '<option value="">-- Pilih Job Order --</option>';
+                
+                jobOrders.forEach(job => {
+                    const option = document.createElement('option');
+                    option.value = job.id;
+                    option.textContent = `${job.noJobOrder} - ${job.konsumen}`;
+                    dropdown.appendChild(option);
+                });
+                
+                dropdown.value = currentValue;
+            });
+        }
+
+        // Reset forms
+        function resetJobOrderForm() {
+            document.getElementById('jobOrderForm').reset();
+            setCurrentDateTime();
+            generateJobOrderNumber();
+            
+            // Reset party checkboxes
+            document.getElementById('party20').checked = false;
+            document.getElementById('party40').checked = false;
+            document.getElementById('party45').checked = false;
+            document.getElementById('qty20').value = 0;
+            document.getElementById('qty40').value = 0;
+            document.getElementById('qty45').value = 0;
+            document.getElementById('partyValue').value = '';
+            
+            currentEditId = null;
+        }
+
+        function resetCostForm() {
+            document.getElementById('costDataForm').reset();
+            currentEditId = null;
+        }
+
+        function resetStaffingForm() {
+            document.getElementById('staffingForm').reset();
+            setCurrentDateTime();
+            currentEditId = null;
+        }
+
+        function resetOperationalForm() {
+            document.getElementById('operationalForm').reset();
+            currentEditId = null;
+        }
+
+        // Edit functions
+        function editJobOrder(id) {
+            const job = jobOrders.find(j => j.id === id);
+            if (!job) return;
+            
+            currentEditId = id;
+            
+            document.getElementById('tanggalJob').value = job.tanggal;
+            document.getElementById('noJobOrder').value = job.noJobOrder;
+            document.getElementById('noInvoice').value = job.noInvoice;
+            document.getElementById('namaKonsumen').value = job.konsumen;
+            document.getElementById('tujuan').value = job.tujuan;
+            document.getElementById('namaKapal').value = job.kapal;
+            document.getElementById('etd').value = job.etd;
+            document.getElementById('keterangan').value = job.keterangan;
+            
+            // Parse party information
+            const partyParts = job.party.split(', ');
+            partyParts.forEach(part => {
+                const match = part.match(/(\d+)x(\d+)ft/);
+                if (match) {
+                    const qty = match[1];
+                    const size = match[2];
+                    document.getElementById(`party${size}`).checked = true;
+                    document.getElementById(`qty${size}`).value = qty;
+                }
+            });
+            updateParty();
+            
+            showTab('job-order');
+        }
+
+        function editCostData(id) {
+            const cost = costData.find(c => c.id === id);
+            if (!cost) return;
+            
+            currentEditId = id;
+            
+            document.getElementById('selectJobOrder').value = cost.jobOrderId;
+            document.getElementById('biayaEMKL').value = formatCurrency(cost.biayaEMKL);
+            document.getElementById('biayaVGM').value = formatCurrency(cost.biayaVGM);
+            document.getElementById('biayaJasaAngkutan').value = formatCurrency(cost.biayaJasaAngkutan);
+            document.getElementById('biayaClosing').value = formatCurrency(cost.biayaClosing);
+            document.getElementById('usePPN').checked = cost.usePPN;
+            document.getElementById('bebasPPN').checked = cost.bebasPPN;
+            
+            showTab('cost-data');
+        }
+
+        function editStaffing(id) {
+            const staffing = staffingData.find(s => s.id === id);
+            if (!staffing) return;
+            
+            currentEditId = id;
+            
+            document.getElementById('tanggalStaffing').value = staffing.tanggalStaffing;
+            document.getElementById('noContainer').value = staffing.noContainer;
+            document.getElementById('selectJobOrderStaffing').value = staffing.jobOrderId;
+            
+            showTab('staffing');
+        }
+
+        function editOperational(id) {
+            const operational = operationalData.find(o => o.id === id);
+            if (!operational) return;
+            
+            currentEditId = id;
+            
+            document.getElementById('selectJobOrderOperational').value = operational.jobOrderId;
+            document.getElementById('uangJalan').value = formatCurrency(operational.uangJalan);
+            document.getElementById('lolo').value = formatCurrency(operational.lolo);
+            document.getElementById('closingOp').value = formatCurrency(operational.closing);
+            document.getElementById('kawalan').value = formatCurrency(operational.kawalan);
+            
+            showTab('operational');
+        }
+
+        // Delete functions
+        async function deleteJobOrder(id) {
+            if (!confirm('Apakah Anda yakin ingin menghapus job order ini?')) return;
+
+            // ambil related items dulu (sebelum memodifikasi array)
+            const relatedCosts = costData.filter(c => c.jobOrderId === id);
+            const relatedStaff = staffingData.filter(s => s.jobOrderId === id);
+            const relatedOps = operationalData.filter(o => o.jobOrderId === id);
+
+            // update memory
+            jobOrders = jobOrders.filter(job => job.id !== id);
+            costData = costData.filter(cost => cost.jobOrderId !== id);
+            staffingData = staffingData.filter(staffing => staffing.jobOrderId !== id);
+            operationalData = operationalData.filter(operational => operational.jobOrderId !== id);
+
+            // remove from IndexedDB
+            try {
+                await deleteFromIndexedDB('jobOrders', id);
+                for (const c of relatedCosts) await deleteFromIndexedDB('costData', c.id);
+                for (const s of relatedStaff) await deleteFromIndexedDB('staffingData', s.id);
+                for (const o of relatedOps) await deleteFromIndexedDB('operationalData', o.id);
+            } catch (err) {
+                console.warn('DB delete error', err);
+            }
+
+            loadJobOrderTable();
+            loadCostDataTable();
+            loadStaffingTable();
+            loadOperationalTable();
+            updateJobOrderDropdowns();
+            updateStats();
+
+            showAlert('Job order berhasil dihapus!', 'success');
+        }
+
+        async function deleteCostData(id) {
+            if (!confirm('Apakah Anda yakin ingin menghapus data biaya ini?')) return;
+
+            // remove from memory
+            costData = costData.filter(cost => cost.id !== id);
+
+            // remove from DB
+            try {
+                await deleteFromIndexedDB('costData', id);
+            } catch (err) {
+                console.warn('DB delete error', err);
+            }
+
+            loadCostDataTable();
+            updateStats();
+            showAlert('Data biaya berhasil dihapus!', 'success');
+        }
+
+        function deleteStaffing(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus data staffing ini?')) {
+                staffingData = staffingData.filter(staffing => staffing.id !== id);
+                // Data saved to memory
+                loadStaffingTable();
+                showAlert('Data staffing berhasil dihapus!', 'success');
+            }
+        }
+
+        function deleteOperational(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus data operasional ini?')) {
+                operationalData = operationalData.filter(operational => operational.id !== id);
+                // Data saved to memory
+                loadOperationalTable();
+                showAlert('Data operasional berhasil dihapus!', 'success');
+            }
+        }
+
+        // Cost detail modal
+        function showCostDetail() {
+            const calculation = calculateTotal();
+            const modal = document.getElementById('costDetailModal');
+            const content = document.getElementById('costDetailContent');
+            
+            const emkl = parseCurrency(document.getElementById('biayaEMKL').value);
+            const vgm = parseCurrency(document.getElementById('biayaVGM').value);
+            const angkutan = parseCurrency(document.getElementById('biayaJasaAngkutan').value);
+            const closing = parseCurrency(document.getElementById('biayaClosing').value);
+            
+            content.innerHTML = `
+                <table class="data-table">
+                    <tr><th>Item</th><th>DPP (11/12)</th><th>Biaya</th><th>PPN 11%</th></tr>
+                    <tr>
+                        <td>Biaya EMKL</td>
+                        <td class="currency">Rp ${formatCurrencyWithDecimal(emkl * 11/12)}</td>
+                        <td class="currency">Rp ${formatCurrencyWithDecimal(emkl)}</td>
+                        <td class="currency">Rp ${formatCurrencyWithDecimal(emkl * 0.11)}</td>
+                    </tr>
+                    <tr>
+                        <td>Biaya VGM</td>
+                        <td class="currency">Rp ${formatCurrencyWithDecimal(vgm * 11/12)}</td>
+                        <td class="currency">Rp ${formatCurrencyWithDecimal(vgm)}</td>
+                        <td class="currency">Rp ${formatCurrencyWithDecimal(vgm * 0.11)}</td>
+                    </tr>
+                    <tr>
+                        <td>Biaya Jasa Angkutan</td>
+                        <td class="currency">Rp ${formatCurrencyWithDecimal(angkutan * 11/12)}</td>
+                        <td class="currency">Rp ${formatCurrencyWithDecimal(angkutan)}</td>
+                        <td class="currency">Rp ${formatCurrencyWithDecimal(angkutan * 0.11)}</td>
+                    </tr>
+                    <tr>
+                        <td>Biaya Closing</td>
+                        <td class="currency">Rp ${formatCurrencyWithDecimal(closing * 11/12)}</td>
+                        <td class="currency">Rp ${formatCurrencyWithDecimal(closing)}</td>
+                        <td class="currency">Rp ${formatCurrencyWithDecimal(closing * 0.11)}</td>
+                    </tr>
+                    <tr style="background: var(--gray-100); font-weight: bold;">
+                        <td>Total DPP</td>
+                        <td class="currency">Rp ${formatCurrencyWithDecimal(calculation.subtotal * 11/12)}</td>
+                        <td class="currency">Rp ${formatCurrencyWithDecimal(calculation.subtotal)}</td>
+                        <td class="currency">Rp ${formatCurrencyWithDecimal(calculation.ppn)}</td>
+                    </tr>
+                </table>
+                
+                <div style="margin-top: 2rem; padding: 1rem; background: var(--gray-100); border-radius: var(--radius);">
+                    <h3>Ringkasan</h3>
+                    <p><strong>Subtotal:</strong> <span class="currency">Rp ${formatCurrencyWithDecimal(calculation.subtotal)}</span></p>
+                    <p><strong>PPN 11%:</strong> <span class="currency">${calculation.bebasPPN ? 'Bebas PPN' : `Rp ${formatCurrencyWithDecimal(calculation.ppn)}`}</span></p>
+                    <p><strong>Grand Total:</strong> <span class="currency">Rp ${formatCurrencyWithDecimal(calculation.total)}</span></p>
+                    ${calculation.bebasPPN ? '<p style="color: var(--warning-color);"><strong>Status: Bebas PPN</strong></p>' : ''}
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function closeCostDetail() {
+            document.getElementById('costDetailModal').style.display = 'none';
+        }
+
+        function printInvoice() {
+    const printEl = document.getElementById('printContent');
+    if (!printEl.innerHTML.trim()) {
+        alert('Silakan generate invoice terlebih dahulu (klik "Generate Invoice").');
+        return;
+    }
+
+    // ensure it's visible for print stylesheet
+    printEl.style.display = 'block';
+
+    window.onafterprint = function() {
+        printEl.style.display = 'none';
+        window.onafterprint = null;
+    };
+
+    window.print();
+}
+        
+        function printFullReport() {
+            const jobOrderId = document.getElementById('selectJobOrderPrint').value;
+            if (!jobOrderId) {
+                alert('Silakan pilih job order terlebih dahulu!');
+                return;
+            }
+            
+            const jobOrder = jobOrders.find(job => job.id === jobOrderId);
+            const cost = costData.find(c => c.jobOrderId === jobOrderId);
+            const staffing = staffingData.filter(s => s.jobOrderId === jobOrderId);
+            const operational = operationalData.find(o => o.jobOrderId === jobOrderId);
+            
+            let staffingTable = '';
+            if (staffing.length > 0) {
+                staffingTable = `
+                    <h3>Data Staffing</h3>
+                    ...
+                `;
+            }
+            
+            let operationalTable = '';
+            if (operational) {
+                operationalTable = `
+                    <h3>Data Operasional</h3>
+                    ...
+                `;
+            }
+            
+            const printContent = `
+                <div class="print-invoice">
+                ...
+                </div>
+            `;
+            
+            const printEl = document.getElementById('printContent');
+            printEl.innerHTML = printContent;
+
+            // show print container (it was display: none in screen CSS)
+            printEl.style.display = 'block';
+
+            // ensure it's hidden again after printing
+            window.onafterprint = function() {
+                printEl.style.display = 'none';
+                window.onafterprint = null;
+            };
+
+            window.print();
+        }
+
+        // Export to Excel
+        function exportToExcel() {
+            const wb = XLSX.utils.book_new();
+            
+            // Job Orders sheet
+            const jobOrdersData = jobOrders.map(job => ({
+                'No Job Order': job.noJobOrder,
+                'No Invoice': job.noInvoice,
+                'Tanggal': new Date(job.tanggal).toLocaleDateString('id-ID'),
+                'Konsumen': job.konsumen,
+                'Party': job.party,
+                'Tujuan': job.tujuan,
+                'Kapal': job.kapal,
+                'ETD': new Date(job.etd).toLocaleDateString('id-ID'),
+                'Keterangan': job.keterangan
+            }));
+            const ws1 = XLSX.utils.json_to_sheet(jobOrdersData);
+            XLSX.utils.book_append_sheet(wb, ws1, 'Job Orders');
+            
+            // Cost Data sheet
+            const costDataExport = costData.map(cost => {
+                const jobOrder = jobOrders.find(job => job.id === cost.jobOrderId);
+                return {
+                    'Job Order': jobOrder ? jobOrder.noJobOrder : 'N/A',
+                    'Konsumen': jobOrder ? jobOrder.konsumen : 'N/A',
+                    'Biaya EMKL': cost.biayaEMKL,
+                    'Biaya VGM': cost.biayaVGM,
+                    'Biaya Jasa Angkutan': cost.biayaJasaAngkutan,
+                    'Biaya Closing': cost.biayaClosing,
+                    'Subtotal': cost.subtotal,
+                    'PPN': cost.bebasPPN ? 'Bebas PPN' : cost.ppn,
+                    'Total': cost.total
+                };
+            });
+            const ws2 = XLSX.utils.json_to_sheet(costDataExport);
+            XLSX.utils.book_append_sheet(wb, ws2, 'Cost Data');
+            
+            // Staffing sheet
+            const staffingExport = staffingData.map(staffing => {
+                const jobOrder = jobOrders.find(job => job.id === staffing.jobOrderId);
+                return {
+                    'Tanggal Staffing': new Date(staffing.tanggalStaffing).toLocaleDateString('id-ID'),
+                    'No Container': staffing.noContainer,
+                    'Job Order': jobOrder ? jobOrder.noJobOrder : 'N/A',
+                    'Konsumen': jobOrder ? jobOrder.konsumen : 'N/A',
+                    'Party': jobOrder ? jobOrder.party : 'N/A'
+                };
+            });
+            const ws3 = XLSX.utils.json_to_sheet(staffingExport);
+            XLSX.utils.book_append_sheet(wb, ws3, 'Staffing');
+            
+            // Operational sheet
+            const operationalExport = operationalData.map(operational => {
+                const jobOrder = jobOrders.find(job => job.id === operational.jobOrderId);
+                return {
+                    'Job Order': jobOrder ? jobOrder.noJobOrder : 'N/A',
+                    'Konsumen': jobOrder ? jobOrder.konsumen : 'N/A',
+                    'Uang Jalan': operational.uangJalan,
+                    'LOLO': operational.lolo,
+                    'Closing': operational.closing,
+                    'Kawalan': operational.kawalan,
+                    'Total': operational.total
+                };
+            });
+            const ws4 = XLSX.utils.json_to_sheet(operationalExport);
+            XLSX.utils.book_append_sheet(wb, ws4, 'Operational');
+            
+            XLSX.writeFile(wb, `EMKL_Data_${new Date().toISOString().slice(0, 10)}.xlsx`);
+        }
+
+        // Data management
+        function backupData() {
+            const allData = {
+                jobOrders,
+                costData,
+                staffingData,
+                operationalData,
+                exportDate: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(allData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `EMKL_Backup_${new Date().toISOString().slice(0, 10)}.json`;
+            link.click();
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    if (confirm('Import data akan mengganti semua data yang ada. Lanjutkan?')) {
+                        jobOrders = importedData.jobOrders || [];
+                        costData = importedData.costData || [];
+                        staffingData = importedData.staffingData || [];
+                        operationalData = importedData.operationalData || [];
+                        
+                        // Update counters
+                        if (jobOrders.length > 0) {
+                            jobOrderCounter = Math.max(...jobOrders.map(job => parseInt(job.noJobOrder.replace('PILOG', '')))) + 1;
+                            invoiceCounter = Math.max(...jobOrders.map(job => parseInt(job.noInvoice.replace('INV-2024-', '')))) + 1;
+                        }
+                        
+                        // Save to localStorage
+                        // Data saved to memory
+                        // Data saved to memory
+                        // Data saved to memory
+                        // Data saved to memory
+                        
+                        // Reload all tables
+                        loadJobOrderTable();
+                        loadCostDataTable();
+                        loadStaffingTable();
+                        loadOperationalTable();
+                        updateJobOrderDropdowns();
+                        updateStats();
+                        
+                        showAlert('Data berhasil diimport!', 'success');
+                    }
+                } catch (error) {
+                    showAlert('Error: File tidak valid!', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function resetAllData() {
+            if (confirm('PERINGATAN: Ini akan menghapus SEMUA data! Apakah Anda yakin?')) {
+                if (confirm('Konfirmasi sekali lagi: Semua data akan hilang permanen!')) {
+                    // Memory cleared
+                    jobOrders = [];
+                    costData = [];
+                    staffingData = [];
+                    operationalData = [];
+                    jobOrderCounter = 1;
+                    invoiceCounter = 1;
+                    
+                    loadJobOrderTable();
+                    loadCostDataTable();
+                    loadStaffingTable();
+                    loadOperationalTable();
+                    updateJobOrderDropdowns();
+                    updateStats();
+                    
+                    showAlert('Semua data berhasil dihapus!', 'success');
+                }
+            }
+        }
+
+        // Update statistics
+        function updateStats() {
+            document.getElementById('totalJobs').textContent = jobOrders.length;
+            
+            const totalRevenue = costData.reduce((sum, cost) => sum + cost.total, 0);
+            document.getElementById('totalRevenue').innerHTML = `Rp ${formatCurrencyWithDecimal(totalRevenue)}`;
+            
+            const pendingJobs = jobOrders.filter(job => {
+                return !costData.some(cost => cost.jobOrderId === job.id);
+            }).length;
+            document.getElementById('pendingJobs').textContent = pendingJobs;
+            
+            const totalContainers = jobOrders.reduce((sum, job) => {
+                const matches = job.party.match(/(\d+)x/g);
+                if (matches) {
+                    return sum + matches.reduce((partSum, match) => partSum + parseInt(match.replace('x', '')), 0);
+                }
+                return sum;
+            }, 0);
+            document.getElementById('totalContainers').textContent = totalContainers;
+        }
+
+        // Show alerts
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            
+            const container = document.querySelector('.container');
+            container.insertBefore(alertDiv, container.firstChild);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('costDetailModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        // Initialize app when page loads
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
